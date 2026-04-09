@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Face recognition attendance tracking for university classrooms." />
+    <meta name="theme-color" content="#C8A84B" />
+
+    <!-- Security headers via meta (supplemented by netlify.toml) -->
+    <meta http-equiv="X-Content-Type-Options" content="nosniff" />
+
+    <!-- Google Fonts: DM Mono (monospace) + Syne (display) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Syne:wght@400;600;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- PWA -->
+    <link rel="manifest" href="/manifest.json" />
+    <link rel="icon" type="image/png" sizes="192x192" href="/icons/icon-192.png" />
+    <link rel="apple-touch-icon" href="/icons/icon-192.png" />
+
+    <!-- face-api.js via CDN (vladmandic maintained fork) -->
+    <script
+      src="https://cdn.jsdelivr.net/npm/@vladmandic/face-api/dist/face-api.esm.js"
+      type="module"
+      crossorigin="anonymous"
+    ></script>
+
+    <title>Changttendance</title>
+  </head>
+  <body>
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+    <div id="app"></div>
+    <div id="recognition-announcements" aria-live="polite" aria-atomic="true" class="sr-only"></div>
+    <div id="error-announcements" aria-live="assertive" aria-atomic="true" class="sr-only"></div>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>
