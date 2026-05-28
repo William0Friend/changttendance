@@ -1,0 +1,21 @@
+name: Scheduled Maintenance
+
+on:
+  schedule:
+    # Runs every 5 days at 08:00 UTC to keep the Supabase free tier project active.
+    # Supabase pauses inactive projects after 7 days — this prevents that.
+    - cron: '0 8 */5 * *'
+  workflow_dispatch:
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Health check
+        run: |
+          curl -sf "${{ secrets.SUPABASE_URL }}/rest/v1/" \
+            -H "apikey: ${{ secrets.SUPABASE_ANON_KEY }}" \
+            -H "Authorization: Bearer ${{ secrets.SUPABASE_ANON_KEY }}" \
+            --max-time 15 \
+            -o /dev/null \
+          && echo "OK" || echo "Unreachable (will retry in 5 days)"

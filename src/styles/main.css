@@ -1,0 +1,192 @@
+@import './design-system.css';
+@import './animations.css';
+
+/* ─── App shell ─────────────────────────────────────────────────────────────── */
+
+#app-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 10px 20px;
+  background: var(--surface-deep); border-bottom: 1px solid var(--border);
+}
+#app-header .logo {
+  font-family: var(--font-display); font-size: 1.1rem;
+  font-weight: 700; color: var(--gold); letter-spacing: -.02em;
+}
+
+/* Tab navigation */
+#tab-bar {
+  display: flex; gap: 2px; background: var(--surface-deep);
+  border-bottom: 1px solid var(--border); padding: 0 16px;
+  overflow-x: auto; -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+#tab-bar::-webkit-scrollbar { display: none; }
+
+.tab-btn {
+  flex-shrink: 0; padding: 11px 15px; background: transparent;
+  border: none; border-bottom: 2px solid transparent;
+  color: var(--text-muted); font-family: var(--font-mono); font-size: .83rem;
+  cursor: pointer; transition: color .15s, border-color .15s; white-space: nowrap;
+}
+.tab-btn[aria-selected="true"] { color: var(--gold); border-bottom-color: var(--gold); }
+.tab-btn:hover:not([aria-selected="true"]) { color: var(--text); }
+
+#tab-content { padding: 20px; max-width: 920px; margin: 0 auto; }
+
+/* Section helpers */
+.section { margin-bottom: 24px; }
+.section-title {
+  font-size: .72rem; font-weight: 500; text-transform: uppercase;
+  letter-spacing: .08em; color: var(--text-muted);
+  margin-bottom: 10px; border-bottom: 1px solid var(--border); padding-bottom: 5px;
+}
+
+/* ─── Camera ────────────────────────────────────────────────────────────────── */
+
+.camera-wrap {
+  position: relative; background: #000; border-radius: var(--radius-lg);
+  border: 1px solid var(--border); overflow: hidden; aspect-ratio: 16/9;
+}
+.camera-wrap video,
+.camera-wrap canvas {
+  position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover;
+}
+.camera-wrap canvas { pointer-events: none; }
+
+.camera-placeholder {
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: 12px; width: 100%; aspect-ratio: 16/9;
+  background: var(--surface-deep); border: 1px dashed var(--border);
+  border-radius: var(--radius-lg); color: var(--text-muted); font-size: .9rem;
+}
+
+.unknown-counter {
+  position: absolute; top: 10px; right: 10px;
+  background: rgba(26,26,26,.85); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 3px 9px;
+  font-size: .78rem; color: var(--text-muted);
+}
+
+.backend-badge {
+  display: inline-flex; align-items: center; gap: 4px;
+  font-size: .72rem; padding: 2px 8px; border-radius: 100px; border: 1px solid;
+}
+.backend-badge.webgl { border-color: var(--success); color: var(--success); }
+.backend-badge.wasm  { border-color: var(--warning); color: var(--warning); }
+.backend-badge.cpu   { border-color: var(--danger);  color: var(--danger);  }
+
+/* ─── Enrollment ────────────────────────────────────────────────────────────── */
+
+.capture-dots { display: flex; gap: 6px; align-items: center; }
+.capture-dot  {
+  width: 10px; height: 10px; border-radius: 50%;
+  background: var(--border); transition: background .2s;
+}
+.capture-dot.filled { background: var(--gold); }
+
+.quality-label {
+  position: absolute; bottom: 10px; left: 50%; transform: translateX(-50%);
+  font-size: .8rem; font-weight: 600; padding: 3px 12px; border-radius: 100px;
+  background: rgba(26,26,26,.85);
+}
+.quality-label.excellent,.quality-label.good { color: var(--success); border: 1px solid var(--success); }
+.quality-label.acceptable { color: var(--warning); border: 1px solid var(--warning); }
+.quality-label.poor       { color: var(--danger);  border: 1px solid var(--danger); }
+
+/* ─── Student grid ──────────────────────────────────────────────────────────── */
+
+.student-grid {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(155px, 1fr)); gap: 7px;
+}
+.student-card {
+  padding: 10px 12px; border-radius: var(--radius);
+  border: 1px solid var(--border); cursor: pointer;
+  background: var(--surface-deep); transition: border-color .15s, background .15s;
+}
+.student-card:hover { border-color: var(--gold-light); }
+.student-card.present      { border-color: var(--gold);    background: var(--gold-dim); }
+.student-card.low-conf     { border-color: var(--warning); background: rgba(212,160,23,.07); }
+.student-card.absent       { border-color: var(--border); }
+.student-card .sname       { font-size: .85rem; font-weight: 500; }
+.student-card .smeta       { font-size: .72rem; color: var(--text-muted); margin-top: 3px; }
+
+/* ─── Session bar ───────────────────────────────────────────────────────────── */
+
+.session-bar {
+  display: flex; align-items: center; gap: 14px; flex-wrap: wrap;
+  padding: 9px 13px; background: var(--surface-deep);
+  border: 1px solid var(--border); border-radius: var(--radius);
+  font-size: .84rem;
+}
+.session-bar-item { display: flex; align-items: center; gap: 6px; }
+
+/* ─── Session log ───────────────────────────────────────────────────────────── */
+
+.session-entry { border: 1px solid var(--border); border-radius: var(--radius-lg); margin-bottom: 9px; overflow: hidden; }
+.session-entry-hdr {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 11px 15px; background: var(--surface-deep); cursor: pointer;
+  transition: background .12s;
+}
+.session-entry-hdr:hover { background: var(--surface); }
+.session-entry-body { padding: 12px 15px; border-top: 1px solid var(--border); }
+
+/* ─── Queue items ───────────────────────────────────────────────────────────── */
+
+.queue-item {
+  display: flex; align-items: center; gap: 12px;
+  padding: 11px; border: 1px solid var(--border);
+  border-radius: var(--radius); margin-bottom: 8px; background: var(--surface-deep);
+}
+.queue-item-thumb {
+  width: 46px; height: 46px; border-radius: var(--radius);
+  object-fit: cover; flex-shrink: 0; background: var(--surface);
+}
+.queue-item-actions { display: flex; gap: 6px; margin-left: auto; flex-shrink: 0; }
+
+/* ─── Toasts ────────────────────────────────────────────────────────────────── */
+
+#toast-container {
+  position: fixed; bottom: 20px; right: 20px;
+  display: flex; flex-direction: column; gap: 8px;
+  z-index: 10000; pointer-events: none;
+}
+
+/* ─── Modal ─────────────────────────────────────────────────────────────────── */
+
+.modal-backdrop {
+  position: fixed; inset: 0; background: rgba(0,0,0,.7);
+  display: flex; align-items: center; justify-content: center;
+  z-index: 9000; padding: 16px;
+}
+.modal {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius-lg); padding: 24px; width: 100%;
+  max-width: 460px; max-height: 90dvh; overflow-y: auto;
+  box-shadow: var(--shadow); animation: fadeIn .15s ease;
+}
+.modal-hdr {
+  display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px;
+}
+.modal-close {
+  background: none; border: none; color: var(--text-muted);
+  font-size: 1.2rem; cursor: pointer; padding: 4px;
+  border-radius: var(--radius); transition: color .12s;
+}
+.modal-close:hover { color: var(--text); }
+.modal-footer { display: flex; gap: 8px; justify-content: flex-end; margin-top: 16px; }
+
+/* ─── QR code ───────────────────────────────────────────────────────────────── */
+
+.qr-wrap {
+  display: flex; justify-content: center;
+  background: #fff; border-radius: var(--radius); padding: 16px; margin: 12px 0;
+}
+
+/* ─── Responsive ────────────────────────────────────────────────────────────── */
+
+@media (max-width: 600px) {
+  #tab-content { padding: 12px; }
+  .student-grid { grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); }
+  .session-bar  { font-size: .78rem; gap: 10px; }
+}

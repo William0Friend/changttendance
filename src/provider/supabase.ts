@@ -73,17 +73,20 @@ export class SupabaseProvider extends AttendanceProvider {
 
       if (error) return { ok: false, error: error.message };
 
-      const records: EnrollmentQueueRecord[] = (data ?? []).map((row) => ({
-        id: row.id as string,
-        studentName: row.student_name as string,
-        studentId: row.student_id as string,
-        email: row.email as string | undefined,
-        classId: row.class_id as string,
-        photoPath: row.photo_path as string,
-        submittedAt: row.submitted_at as string,
-        status: row.status as 'pending' | 'approved' | 'rejected',
-        notes: row.notes as string | undefined,
-      }));
+      const records: EnrollmentQueueRecord[] = (data ?? []).map((row) => {
+        const rec: EnrollmentQueueRecord = {
+          id:          row.id as string,
+          studentName: row.student_name as string,
+          studentId:   row.student_id as string,
+          classId:     row.class_id as string,
+          photoPath:   row.photo_path as string,
+          submittedAt: row.submitted_at as string,
+          status:      row.status as 'pending' | 'approved' | 'rejected',
+        };
+        if (row.email) rec.email = row.email as string;
+        if (row.notes) rec.notes = row.notes as string;
+        return rec;
+      });
 
       return { ok: true, data: records };
     } catch (e) {

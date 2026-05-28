@@ -1,0 +1,11 @@
+services:
+  e2e:
+    build:
+      context: .
+      dockerfile: docker/playwright.Dockerfile
+    working_dir: /workspace
+    volumes:
+      - ./:/workspace:cached
+    environment:
+      - CI=1
+    command: ["npm", "run", "test:e2e"]

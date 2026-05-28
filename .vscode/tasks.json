@@ -1,0 +1,125 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Changttendance: Start (docker compose up)",
+      "type": "shell",
+      "command": "docker compose up -d",
+      "group": "build",
+      "presentation": { "reveal": "always", "panel": "new" },
+      "problemMatcher": []
+    },
+    {
+      "label": "Changttendance: Stop",
+      "type": "shell",
+      "command": "docker compose down",
+      "group": "build",
+      "presentation": { "reveal": "always", "panel": "shared" },
+      "problemMatcher": []
+    },
+    {
+      "label": "Changttendance: DB Init",
+      "type": "shell",
+      "command": "docker compose exec db psql -U chang -d changttendance -f /docker-entrypoint-initdb.d/init.sql",
+      "group": "build",
+      "presentation": { "reveal": "always", "panel": "shared" },
+      "problemMatcher": []
+    },
+    {
+      "label": "Changttendance: Fresh DB Init",
+      "type": "shell",
+      "command": "docker compose exec db psql -U chang -d changttendance -c \"DROP SCHEMA public CASCADE; CREATE SCHEMA public;\" && docker compose exec db psql -U chang -d changttendance -f /docker-entrypoint-initdb.d/init.sql",
+      "group": "build",
+      "presentation": { "reveal": "always", "panel": "shared" },
+      "problemMatcher": []
+    },
+    {
+      "label": "Changttendance: Process Enrollment Queue",
+      "type": "shell",
+      "command": "node scripts/process-enrollment-queue.js",
+      "group": "test",
+      "presentation": { "reveal": "always", "panel": "shared" },
+      "problemMatcher": []
+    },
+    {
+      "label": "Changttendance: Status",
+      "type": "shell",
+      "command": "docker compose exec db pg_isready -U chang -d changttendance || echo 'DB not ready'",
+      "group": "test",
+      "presentation": { "reveal": "always", "panel": "shared" },
+      "problemMatcher": []
+    },
+    {
+      "label": "Changttendance: Fetch Models",
+      "type": "shell",
+      "command": "docker compose -f docker-compose.yml -f docker-compose.override.yml -f docker-compose.e2e.yml run --rm e2e npm run fetch-models",
+      "group": "build",
+      "presentation": { "reveal": "always", "panel": "shared" },
+      "problemMatcher": []
+    },
+    {
+      "label": "Changttendance: Install dependencies",
+      "type": "shell",
+      "command": "docker compose -f docker-compose.yml -f docker-compose.override.yml -f docker-compose.e2e.yml run --rm e2e npm ci",
+      "group": "build",
+      "presentation": { "reveal": "always", "panel": "shared" },
+      "problemMatcher": []
+    },
+    {
+      "label": "Changttendance: Build Images",
+      "type": "shell",
+      "command": "docker compose build",
+      "group": "build",
+      "presentation": { "reveal": "always", "panel": "shared" },
+      "problemMatcher": []
+    },
+    {
+      "label": "Changttendance: Run E2E Tests",
+      "type": "shell",
+      "command": "docker compose -f docker-compose.yml -f docker-compose.override.yml -f docker-compose.e2e.yml run --rm e2e npm run test:e2e",
+      "group": "test",
+      "presentation": { "reveal": "always", "panel": "shared" },
+      "problemMatcher": []
+    },
+    {
+      "label": "Changttendance: Run Unit Tests",
+      "type": "shell",
+      "command": "npm run test:unit",
+      "group": "test",
+      "presentation": { "reveal": "always", "panel": "shared" },
+      "problemMatcher": []
+    },
+    {
+      "label": "Changttendance: Run Tests",
+      "type": "shell",
+      "command": "npm run test:unit",
+      "group": { "kind": "test", "isDefault": true },
+      "presentation": { "reveal": "always", "panel": "shared" },
+      "problemMatcher": []
+    },
+
+    {
+      "label": "Changttendance: Logs (follow)",
+      "type": "shell",
+      "command": "docker compose logs -f web db server",
+      "isBackground": true,
+      "group": "build",
+      "presentation": { "reveal": "always", "panel": "new" },
+      "problemMatcher": []
+    },
+    {
+      "label": "🚀 Changttendance: First-Time Setup",
+      "dependsOn": [
+        "Changttendance: Install dependencies",
+        "Changttendance: Fetch Models",
+        "Changttendance: Build Images",
+        "Changttendance: Start (docker compose up)",
+        "Changttendance: DB Init"
+      ],
+      "dependsOrder": "sequence",
+      "group": { "kind": "build", "isDefault": true },
+      "presentation": { "reveal": "always", "panel": "shared" },
+      "problemMatcher": []
+    }
+  ]
+}

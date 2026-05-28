@@ -1,0 +1,22 @@
+services:
+  server:
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    environment:
+      PGHOST: ${POSTGRES_HOST:-db}
+      PGUSER: ${POSTGRES_USER:-chang}
+      PGPASSWORD: ${POSTGRES_PASSWORD:-changpass}
+      PGDATABASE: ${POSTGRES_DB:-changttendance}
+      PGPORT: ${POSTGRES_PORT:-5432}
+      PORT: 3000
+    volumes:
+      - server-data:/usr/src/app/data
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - "3000:3000"
+
+volumes:
+  server-data:

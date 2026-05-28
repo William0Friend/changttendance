@@ -1,0 +1,37 @@
+services:
+  # Local Postgres — mirrors the Supabase enrollment_queue schema for development.
+  # NOTE: The app talks to Supabase via REST (HTTPS), not raw Postgres.
+  # This service is for local SQL tooling and manual inspection only.
+  db:
+    image: postgres:15
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: chang
+      POSTGRES_PASSWORD: changpass
+      POSTGRES_DB: changttendance
+    volumes:
+      - ./docker/initdb:/docker-entrypoint-initdb.d:ro
+      - db-data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U chang -d changttendance"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Static web app served by nginx.
+  # VITE_* vars must be provided at build time — they are embedded during `npm run build`.
+  # Copy .env.example to .env and fill in real values, then run: docker compose up --build
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        VITE_SUPABASE_URL: ${VITE_SUPABASE_URL:-}
+        VITE_SUPABASE_ANON_KEY: ${VITE_SUPABASE_ANON_KEY:-}
+    ports:
+      - "8080:80"
+
+volumes:
+  db-data:
